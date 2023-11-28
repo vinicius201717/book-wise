@@ -92,7 +92,6 @@ export const TitleOptions = styled('header', {
     alignItems: 'center',
     gap: '$5',
     marginRight: '20px',
-
   },
 })
 
@@ -101,5 +100,5 @@ export const PopularBook = styled('div', {
   height: '130px',
   borderRadius: '$md',
   backgroundColor: 'red',
-  marginBottom: '$2'
+  marginBottom: '$2',
 })
