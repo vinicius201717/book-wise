@@ -1,8 +1,7 @@
-// styles.js
 import { styled } from '../styles'
 
 export const MainContainer = styled('main', {
-  width: '100%',
+  width: '100vw',
   display: 'flex',
   flexDirection: 'column',
   overflow: 'hidden',
@@ -18,8 +17,22 @@ export const Container = styled('main', {
   justifyContent: 'space-around',
 })
 
+export const LastReading = styled('div', {
+  width: '85%',
+  height: '192px',
+  minHeight: '192px',
+  display: 'flex',
+  padding: '20px 24px',
+  borderRadius: '$md',
+  backgroundColor: '$gray600',
+})
+
+export const ContaineTimeLineBookInfo = styled('div', {
+  display: 'flex',
+})
+
 export const ContainerTimeLineBooks = styled('div', {
-  width: '60%',
+  width: '908px',
   height: '100%',
 })
 
@@ -35,12 +48,70 @@ export const TimeLineBooks = styled('div', {
   },
 })
 
+export const InfoUserBook = styled('div', {
+  flex: '1',
+  height: '200px',
+  paddingTop: '10px',
+  display: 'flex',
+  justifyContent: 'space-between',
+})
+
+export const InfoUserPerfil = styled('div', {
+  display: 'flex',
+  gap: '$4',
+})
+
+export const InfoUserDescription = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+
+  span: {
+    fontSize: '$xs',
+    opacity: '0.5',
+  },
+})
+
 export const ItemBook = styled('div', {
   width: '85%',
-  minHeight: '400px',
+  minHeight: '280px',
   marginBottom: '20px',
   borderRadius: '$md',
-  backgroundColor: '$green300',
+  backgroundColor: '$gray600',
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  padding: '$4',
+})
+
+export const TimeLineImg = styled('div', {
+  width: '108px',
+  height: '152px',
+  borderRadius: '$md',
+})
+
+export const TimeLineBookInfo = styled('div', {
+  flex: 1,
+  height: '100%',
+  padding: '0 $6',
+  position: 'relative',
+})
+
+export const TimeLineBookInfoTitle = styled('header', {
+  display: 'flex',
+  justifyContent: 'space-between',
+
+  span: {
+    fontSize: '$sm',
+    color: '$gray400',
+  },
+})
+
+export const TimeLineBookInfoDescription = styled('div', {
+  maxHeight: '88px',
+  position: 'absolute',
+  bottom: '5px',
+  color: '$gray300',
+  opacity: 0.6,
 })
 
 export const Title = styled('header', {
@@ -63,7 +134,7 @@ export const SubTitle = styled('h4', {
 })
 
 export const ContaineOptionsBooks = styled('div', {
-  width: '35%',
+  width: '380px',
   height: '100vh',
   display: 'flex',
   justifyContent: 'center',
@@ -97,8 +168,32 @@ export const TitleOptions = styled('header', {
 
 export const PopularBook = styled('div', {
   width: '100%',
-  height: '130px',
+  minHeight: '130px',
   borderRadius: '$md',
-  backgroundColor: 'red',
   marginBottom: '$2',
+  display: 'flex',
+  padding: '16px 20px',
+  gap: '$2',
+  alignItems: 'center',
+  backgroundColor: '$gray700',
+})
+
+export const PopularBookImg = styled('div', {
+  width: '64px',
+  height: '96px',
+  borderRadius: '$sm',
+})
+
+export const PopularBookInfo = styled('div', {
+  flex: '1',
+  height: '96px',
+  paddingLeft: '20px',
+})
+
+export const PopularBookInfoTitle = styled('div', {
+  marginBottom: '28px',
+  span: {
+    color: '$gray400',
+    opacity: '0.7',
+  },
 })

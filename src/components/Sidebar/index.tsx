@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { SidebarContainer, Bar, LinkItem, FooterSidebar } from './styles'
 import logo from '../../assets/Logo.png'
-import { ChartLineUp, Binoculars, SignIn } from 'phosphor-react'
+import { ChartLineUp, Binoculars, SignIn, User } from 'phosphor-react'
 import { useRouter } from 'next/router'
 
 export default function Sidebar() {
@@ -24,6 +24,11 @@ export default function Sidebar() {
           {link === '/explore' ? <Bar /> : ''}
           <Binoculars />
           Explorar
+        </LinkItem>
+        <LinkItem href="/perfil" active={link === '/perfil'}>
+          {link === '/perfil' ? <Bar /> : ''}
+          <User />
+          Perfil
         </LinkItem>
       </ul>
       <FooterSidebar>
