@@ -5,6 +5,8 @@ import {
   ContainerGrid,
   ContainerOptions,
   ContainerSearch,
+  DialogAssessActions,
+  DialogAssessFooter,
   DialogAssessments,
   DialogAssessmentsHeader,
   DialogAssessmentsHeaderProfile,
@@ -16,13 +18,15 @@ import {
   DialogFooterSubItem,
   DialogHeader,
   DialogOperation,
+  DialogTextArea,
+  DialogToAssess,
   HeaderExplore,
   HeaderTitleIcon,
   InfoItemBook,
   ItemOptions,
   SpanText,
 } from './styles'
-import { Binoculars, BookOpen, BookmarkSimple } from 'phosphor-react'
+import { Binoculars, BookOpen, BookmarkSimple, X, Check } from 'phosphor-react'
 import { Search } from '@/src/components/Search'
 import Image from 'next/image'
 
@@ -37,8 +41,23 @@ import avatar from '@/src/assets/Avatar.png'
 
 export default function Explore() {
   const [open, setOpen] = useState(false)
+  const [assess, setAssess] = useState(false)
 
-  console.log(open)
+  function openAssess() {
+    if (assess) {
+      setAssess(false)
+    } else {
+      setAssess(true)
+    }
+  }
+
+  function closedModal() {
+    if (open) {
+      setOpen(false)
+    } else {
+      setOpen(true)
+    }
+  }
 
   return (
     <MainLayout>
@@ -80,6 +99,12 @@ export default function Explore() {
             <Dialog.Portal>
               <Overlay />
               <Content>
+                <X
+                  style={{ marginLeft: '95%' }}
+                  width={20}
+                  height={20}
+                  onClick={closedModal}
+                />
                 <DialogBookSelected>
                   <DialogHeader>
                     <Image width={255} height={242} src={book} alt=""></Image>
@@ -115,8 +140,33 @@ export default function Explore() {
                 </DialogBookSelected>
                 <DialogOperation>
                   <span>Avaliações</span>
-                  <span>Avaliar</span>
+                  <span onClick={openAssess}>Avaliar</span>
                 </DialogOperation>
+                <DialogToAssess active={assess}>
+                  <DialogAssessmentsHeader>
+                    <DialogAssessmentsHeaderProfile>
+                      <Avatar src={avatar} />
+                      <p>Brandon Botosh</p>
+                    </DialogAssessmentsHeaderProfile>
+                    <StarRatings
+                      rating={3}
+                      starDimension="15"
+                      starEmptyColor="gray"
+                      starHoverColor="yellow"
+                      starRatedColor="red"
+                      numberOfStars={5}
+                    />
+                  </DialogAssessmentsHeader>
+                  <DialogTextArea />
+                  <DialogAssessFooter>
+                    <DialogAssessActions onClick={openAssess}>
+                      <X width={30} height={30} color="#8381D9" />
+                    </DialogAssessActions>
+                    <DialogAssessActions>
+                      <Check width={30} height={30} color="#50B2C0" />
+                    </DialogAssessActions>
+                  </DialogAssessFooter>
+                </DialogToAssess>
                 <DialogContainerAssessments>
                   <DialogAssessments>
                     <DialogAssessmentsHeader>

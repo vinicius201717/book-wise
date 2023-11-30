@@ -225,6 +225,7 @@ export const DialogAssessmentsHeader = styled('header', {
 
 export const DialogAssessmentsHeaderProfile = styled('div', {
   display: 'flex',
+  alignItems: 'center',
   gap: '$2',
 
   div: {
@@ -238,5 +239,55 @@ export const SpanText = styled('span', {
   color: '$gray400',
   opacity: '0.7',
   fontSize: '$sm',
+})
+
+export const DialogToAssess = styled('form', {
+  variants: {
+    active: {
+      true: {
+        width: '100%',
+        padding: '10px',
+        marginBottom: '20px',
+        borderRadius: '$md',
+        backgroundColor: '$gray700',
+      },
+      false: {
+        display: 'none',
+      },
+    },
+  },
+})
+
+export const DialogTextArea = styled('textarea', {
+  minWidth: '100%',
+  maxWidth: '100%',
+  height: '200px',
+
+  backgroundColor: '$gray600',
+  border: '1px solid $gray500',
+  borderRadius: '$sm',
+
+  '&:focus': {
+    outline: 'none',
+  },
+})
+
+export const DialogAssessFooter = styled('footer', {
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'end',
+})
+
+export const DialogAssessActions = styled('button', {
+  width: '50px',
+  height: '50px',
+  marginLeft: '10px',
+  borderRadius: '$sm',
+  backgroundColor: '$gray600',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: 'none',
+  marginTop: '5px',
 })
 // #endregion

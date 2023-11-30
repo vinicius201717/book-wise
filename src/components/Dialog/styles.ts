@@ -15,6 +15,11 @@ export const Content = styled(Dialog.Content, {
   top: '0',
   right: '0',
   padding: '$3',
+  overflowY: 'auto',
+
+  '&::-webkit-scrollbar': {
+    width: '7px',
+  },
 })
 
 export const Overlay = styled(Dialog.Overlay, {
