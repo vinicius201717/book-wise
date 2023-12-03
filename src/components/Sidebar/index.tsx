@@ -1,21 +1,23 @@
 import Image from 'next/image'
 import { SidebarContainer, Bar, LinkItem, FooterSidebar } from './styles'
-import logo from '../../assets/Logo.png'
 import { ChartLineUp, Binoculars, SignIn, User } from 'phosphor-react'
 import { useRouter } from 'next/router'
+import { signOut } from 'next-auth/react'
 
 export default function Sidebar() {
   const router = useRouter()
 
-  const link = router.pathname
+  async function handleLogout() {
+    await signOut()
+  }
 
-  console.log(link)
+  const link = router.pathname
 
   return (
     <SidebarContainer>
-      <Image src={logo} alt="" width={140} />
+      <Image src="/assets/Logo.png" alt="" width={140} height={40} />
       <ul>
-        <LinkItem href="/" active={link === '/'}>
+        <LinkItem href="/home" active={link === '/home'}>
           {link === '/' ? <Bar /> : ''}
           <ChartLineUp />
           Início
@@ -31,7 +33,7 @@ export default function Sidebar() {
           Perfil
         </LinkItem>
       </ul>
-      <FooterSidebar>
+      <FooterSidebar onClick={handleLogout}>
         <p>logout</p>
         <SignIn />
       </FooterSidebar>

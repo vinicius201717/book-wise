@@ -18,28 +18,18 @@ import {
   TimeLineBookInfoTitle,
   TimeLineBookInfoDescription,
   LastReading,
-  InfoUserBook,
-  ContaineTimeLineBookInfo,
-  InfoUserDescription,
-  InfoUserPerfil,
 } from './styles'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 
-import book from '@/src/assets/Book.png'
-import book1 from '@/src/assets/Book (1).png'
-import avatar from '@/src/assets/Avatar.png'
-
 import Image from 'next/image'
-import { useState } from 'react'
 import StarRatings from 'react-star-ratings'
-import { Avatar } from '@/src/components/Avatar'
+import { api } from '@/src/lib/axios'
+import { useSession } from 'next-auth/react'
+import React from 'react'
 
-export default function Home() {
-  const [rating, setRating] = useState(0)
-
-  const changeRating = (newRating: number) => {
-    setRating(newRating)
-  }
+export default function Home({ books }: any) {
+  const session = useSession()
+  console.log(session)
 
   return (
     <MainLayout>
@@ -50,158 +40,67 @@ export default function Home() {
               <ChartLineUp />
               <h2>Início</h2>
             </Title>
-            <SubTitle>Sua última leitura</SubTitle>
-            <LastReading>
-              <Image src={book1} alt="" />
-              <TimeLineBookInfo>
-                <TimeLineBookInfoTitle>
-                  <span>Há 2 dias</span>
-                  <StarRatings
-                    rating={rating}
-                    starRatedColor="yellow"
-                    starEmptyColor="gray"
-                    numberOfStars={5}
-                    starDimension="20"
-                  />
-                </TimeLineBookInfoTitle>
-                <p>Entendendo Algoritmos</p>
-                <span>Adtya Bhargava</span>
 
-                <TimeLineBookInfoDescription>
-                  Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                  sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                  lectu...
-                </TimeLineBookInfoDescription>
-              </TimeLineBookInfo>
-            </LastReading>
+            {books.map((book: any) => {
+              if (book.user) {
+                return (
+                  <React.Fragment key={book.id}>
+                    <SubTitle>Sua última leitura</SubTitle>
+                    <LastReading>
+                      <Image src="/teste.png" alt="" />
+                      <TimeLineBookInfo>
+                        <TimeLineBookInfoTitle>
+                          <span>Há 2 dias</span>
+                          <StarRatings
+                            starRatedColor="yellow"
+                            starEmptyColor="gray"
+                            numberOfStars={5}
+                            starDimension="20"
+                          />
+                        </TimeLineBookInfoTitle>
+                        <p>{book.title}</p>
+                        <span>{book.author}</span>
+
+                        <TimeLineBookInfoDescription>
+                          {book.content}
+                        </TimeLineBookInfoDescription>
+                      </TimeLineBookInfo>
+                    </LastReading>
+                  </React.Fragment>
+                )
+              } else {
+                return ''
+              }
+            })}
+
             <SubTitle>Avaliações mais recentes</SubTitle>
             <TimeLineBooks>
-              <ItemBook>
-                <InfoUserBook>
-                  <InfoUserPerfil>
-                    <Avatar src={avatar} />
-                    <InfoUserDescription>
-                      <p>Jaxson Dias</p>
-                      <span>Hoje</span>
-                    </InfoUserDescription>
-                  </InfoUserPerfil>
-                  <StarRatings
-                    rating={rating}
-                    starRatedColor="yellow"
-                    starEmptyColor="gray"
-                    numberOfStars={5}
-                    starDimension="20"
-                  />
-                </InfoUserBook>
-                <ContaineTimeLineBookInfo>
-                  <Image src={book1} alt="" />
-                  <TimeLineBookInfo>
-                    <TimeLineBookInfoTitle>
-                      <span>Há 2 dias</span>
-                    </TimeLineBookInfoTitle>
-                    <p>Entendendo Algoritmos</p>
-                    <span>Adtya Bhargava</span>
+              {books.map((book: any) => {
+                console.log(book)
+                return (
+                  <ItemBook key={book.id}>
+                    <Image src={book.image} width={100} height={160} alt="" />
+                    <TimeLineBookInfo>
+                      <TimeLineBookInfoTitle>
+                        <span>Há 2 dias</span>
+                        <StarRatings
+                          rating={book.assessments[0]?.rating}
+                          starRatedColor="yellow"
+                          starEmptyColor="gray"
+                          numberOfStars={5}
+                          starDimension="20"
+                        />
+                      </TimeLineBookInfoTitle>
+                      <p>{book.title}</p>
+                      <span>{book.author}</span>
 
-                    <TimeLineBookInfoDescription>
-                      Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                      sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                      lectu...
-                    </TimeLineBookInfoDescription>
-                  </TimeLineBookInfo>
-                </ContaineTimeLineBookInfo>
-              </ItemBook>
-              <ItemBook>
-                <Image src={book1} alt="" />
-                <TimeLineBookInfo>
-                  <TimeLineBookInfoTitle>
-                    <span>Há 2 dias</span>
-                    <StarRatings
-                      rating={rating}
-                      starRatedColor="yellow"
-                      starEmptyColor="gray"
-                      numberOfStars={5}
-                      starDimension="20"
-                    />
-                  </TimeLineBookInfoTitle>
-                  <p>Entendendo Algoritmos</p>
-                  <span>Adtya Bhargava</span>
-
-                  <TimeLineBookInfoDescription>
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu...
-                  </TimeLineBookInfoDescription>
-                </TimeLineBookInfo>
-              </ItemBook>
-              <ItemBook>
-                <Image src={book1} alt="" />
-                <TimeLineBookInfo>
-                  <TimeLineBookInfoTitle>
-                    <span>Há 2 dias</span>
-                    <StarRatings
-                      rating={rating}
-                      starRatedColor="yellow"
-                      starEmptyColor="gray"
-                      numberOfStars={5}
-                      starDimension="20"
-                    />
-                  </TimeLineBookInfoTitle>
-                  <p>Entendendo Algoritmos</p>
-                  <span>Adtya Bhargava</span>
-
-                  <TimeLineBookInfoDescription>
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu...
-                  </TimeLineBookInfoDescription>
-                </TimeLineBookInfo>
-              </ItemBook>
-              <ItemBook>
-                <Image src={book1} alt="" />
-                <TimeLineBookInfo>
-                  <TimeLineBookInfoTitle>
-                    <span>Há 2 dias</span>
-                    <StarRatings
-                      rating={rating}
-                      starRatedColor="yellow"
-                      starEmptyColor="gray"
-                      numberOfStars={5}
-                      starDimension="20"
-                    />
-                  </TimeLineBookInfoTitle>
-                  <p>Entendendo Algoritmos</p>
-                  <span>Adtya Bhargava</span>
-
-                  <TimeLineBookInfoDescription>
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu...
-                  </TimeLineBookInfoDescription>
-                </TimeLineBookInfo>
-              </ItemBook>
-              <ItemBook>
-                <Image src={book1} alt="" />
-                <TimeLineBookInfo>
-                  <TimeLineBookInfoTitle>
-                    <span>Há 2 dias</span>
-                    <StarRatings
-                      rating={rating}
-                      starRatedColor="yellow"
-                      starEmptyColor="gray"
-                      numberOfStars={5}
-                      starDimension="20"
-                    />
-                  </TimeLineBookInfoTitle>
-                  <p>Entendendo Algoritmos</p>
-                  <span>Adtya Bhargava</span>
-
-                  <TimeLineBookInfoDescription>
-                    Nec tempor nunc in egestas. Euismod nisi eleifend at et in
-                    sagittis. Penatibus id vestibulum imperdiet a at imperdiet
-                    lectu...
-                  </TimeLineBookInfoDescription>
-                </TimeLineBookInfo>
-              </ItemBook>
+                      <TimeLineBookInfoDescription>
+                        {book.content}
+                      </TimeLineBookInfoDescription>
+                    </TimeLineBookInfo>
+                  </ItemBook>
+                )
+              })}
             </TimeLineBooks>
           </ContainerTimeLineBooks>
           <ContaineOptionsBooks>
@@ -212,30 +111,51 @@ export default function Home() {
               </button>
             </TitleOptions>
             <OptionsBooks>
-              <PopularBook>
-                <PopularBookImg>
-                  <Image src={book} alt="" />
-                </PopularBookImg>
-                <PopularBookInfo>
-                  <PopularBookInfoTitle>
-                    <h4>A revoloção dos bichos</h4>
-                    <span>George Orwell</span>
-                  </PopularBookInfoTitle>
-                  <StarRatings
-                    rating={rating}
-                    starRatedColor="yellow"
-                    starEmptyColor="gray"
-                    changeRating={changeRating}
-                    numberOfStars={5}
-                    name="rating"
-                    starDimension="20"
-                  />
-                </PopularBookInfo>
-              </PopularBook>
+              {books.map((book: any) => {
+                if (book.assessments[0]?.rating > 3) {
+                  return (
+                    <PopularBook key={book.id}>
+                      <PopularBookImg>
+                        <Image
+                          src={book.image}
+                          width={60}
+                          height={100}
+                          alt=""
+                        />
+                      </PopularBookImg>
+                      <PopularBookInfo>
+                        <PopularBookInfoTitle>
+                          <h4>A revoloção dos bichos</h4>
+                          <span>George Orwell</span>
+                        </PopularBookInfoTitle>
+                        <StarRatings
+                          starRatedColor="yellow"
+                          starEmptyColor="gray"
+                          numberOfStars={5}
+                          name="rating"
+                          starDimension="12"
+                        />
+                      </PopularBookInfo>
+                    </PopularBook>
+                  )
+                } else {
+                  return ''
+                }
+              })}
             </OptionsBooks>
           </ContaineOptionsBooks>
         </Container>
       </MainContainer>
     </MainLayout>
   )
+}
+
+export async function getServerSideProps() {
+  const response = await api.get('http://localhost:3000/api/books')
+
+  return {
+    props: {
+      books: response.data,
+    },
+  }
 }

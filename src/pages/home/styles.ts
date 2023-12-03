@@ -38,7 +38,7 @@ export const ContainerTimeLineBooks = styled('div', {
 
 export const TimeLineBooks = styled('div', {
   width: '100%',
-  height: '90%',
+  height: '80%',
   display: 'flex',
   flexDirection: 'column',
   overflowY: 'auto',
@@ -73,13 +73,12 @@ export const InfoUserDescription = styled('div', {
 
 export const ItemBook = styled('div', {
   width: '85%',
-  minHeight: '280px',
+  minHeight: '200px',
   marginBottom: '20px',
   borderRadius: '$md',
   backgroundColor: '$gray600',
   display: 'flex',
   justifyContent: 'center',
-  flexDirection: 'column',
   padding: '$4',
 })
 
@@ -168,11 +167,10 @@ export const TitleOptions = styled('header', {
 
 export const PopularBook = styled('div', {
   width: '100%',
-  minHeight: '130px',
   borderRadius: '$md',
   marginBottom: '$2',
   display: 'flex',
-  padding: '16px 20px',
+  padding: '5px 8px',
   gap: '$2',
   alignItems: 'center',
   backgroundColor: '$gray700',
@@ -186,7 +184,6 @@ export const PopularBookImg = styled('div', {
 
 export const PopularBookInfo = styled('div', {
   flex: '1',
-  height: '96px',
   paddingLeft: '20px',
 })
 

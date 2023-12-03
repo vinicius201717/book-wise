@@ -30,18 +30,38 @@ import { Binoculars, BookOpen, BookmarkSimple, X, Check } from 'phosphor-react'
 import { Search } from '@/src/components/Search'
 import Image from 'next/image'
 
-import book from '@/src/assets/Book.png'
 import StarRatings from 'react-star-ratings'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
 import { Content, Overlay, Trigger } from '@/src/components/Dialog/styles'
 import { Avatar } from '@/src/components/Avatar'
+import { api } from '@/src/lib/axios'
 
-import avatar from '@/src/assets/Avatar.png'
+interface AssessmentsInterface {
+  id: string
+  rating: number
+  createdAt: string
+  userId: string
+  postId: string
+}
 
-export default function Explore() {
+interface BookInterface {
+  id: string
+  title: string
+  content: string
+  image: string
+  author: string
+  assessments: AssessmentsInterface[]
+}
+
+export default function Explore({ books }: any) {
   const [open, setOpen] = useState(false)
   const [assess, setAssess] = useState(false)
+  const [bookSelect, setBookSelect] = useState<BookInterface | null>(null)
+
+  function handleBookSelected(book: BookInterface) {
+    setBookSelect(book)
+  }
 
   function openAssess() {
     if (assess) {
@@ -81,21 +101,26 @@ export default function Explore() {
         </ContainerOptions>
         <ContainerGrid>
           <Dialog.Root open={open} onOpenChange={setOpen}>
-            <Trigger>
-              <BookItemGrid>
-                <Image height={160} width={130} src={book} alt="" />
-                <InfoItemBook>
-                  <h2>A revolução dos bichos</h2>
-                  <span>George Orwell</span>
-                  <StarRatings
-                    starRatedColor="yellow"
-                    starEmptyColor="gray"
-                    numberOfStars={5}
-                    starDimension="20"
-                  />
-                </InfoItemBook>
-              </BookItemGrid>
-            </Trigger>
+            {books.map((book: any) => {
+              return (
+                <Trigger key={book.id} onClick={() => handleBookSelected(book)}>
+                  <BookItemGrid>
+                    <Image height={160} width={130} src={book.image} alt="" />
+                    <InfoItemBook>
+                      <h2>{book.title}</h2>
+                      <span>{book.author}</span>
+                      <StarRatings
+                        rating={book.assessments[0]?.rating}
+                        starRatedColor="red"
+                        starEmptyColor="gray"
+                        numberOfStars={5}
+                        starDimension="12"
+                      />
+                    </InfoItemBook>
+                  </BookItemGrid>
+                </Trigger>
+              )
+            })}
             <Dialog.Portal>
               <Overlay />
               <Content>
@@ -107,15 +132,19 @@ export default function Explore() {
                 />
                 <DialogBookSelected>
                   <DialogHeader>
-                    <Image width={255} height={242} src={book} alt=""></Image>
+                    <Image
+                      width={255}
+                      height={242}
+                      src={bookSelect?.image ?? ''}
+                      alt=""
+                    ></Image>
                     <DialogBookSelectedInfo>
-                      <h2>
-                        14 Hábitos de Desenvolvedores Altamente Produtivos
-                      </h2>
-                      <span>Zeno Rocha</span>
+                      <h2>{bookSelect?.title}</h2>
+                      <span>{bookSelect?.author}</span>
                       <StarRatings
-                        starDimension="20"
-                        starRatedColor="yellow"
+                        rating={bookSelect?.assessments[0]?.rating}
+                        starDimension="12"
+                        starRatedColor="red"
                         starEmptyColor="gray"
                         numberOfStars={5}
                       />
@@ -145,7 +174,7 @@ export default function Explore() {
                 <DialogToAssess active={assess}>
                   <DialogAssessmentsHeader>
                     <DialogAssessmentsHeaderProfile>
-                      <Avatar src={avatar} />
+                      <Avatar src="/assets/avatar.png" />
                       <p>Brandon Botosh</p>
                     </DialogAssessmentsHeaderProfile>
                     <StarRatings
@@ -171,7 +200,7 @@ export default function Explore() {
                   <DialogAssessments>
                     <DialogAssessmentsHeader>
                       <DialogAssessmentsHeaderProfile>
-                        <Avatar src={avatar} />
+                        <Avatar src="/assets/avatar.png" />
                         <div>
                           <p>Brandon Botosh</p>
                           <SpanText>Há 2 dias</SpanText>
@@ -201,4 +230,14 @@ export default function Explore() {
       </ContainerExplore>
     </MainLayout>
   )
+}
+
+export async function getServerSideProps() {
+  const response = await api.get('http://localhost:3000/api/books')
+
+  return {
+    props: {
+      books: response.data,
+    },
+  }
 }

@@ -5,5 +5,5 @@ type AvatarImgProps = {
 }
 
 export function Avatar({ src }: AvatarImgProps) {
-  return <AvatarContainer src={src} alt="" />
+  return <AvatarContainer src={src} alt="" height={160} width={130} />
 }
