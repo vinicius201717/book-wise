@@ -1,4 +1,5 @@
 import { styled } from '../styles'
+// #endregion
 
 export const ContainerExplore = styled('div', {
   width: '100vw',
@@ -34,9 +35,6 @@ export const HeaderTitleIcon = styled('div', {
   },
 })
 
-export const ContainerSearch = styled('div', {
-  width: '500px',
-})
 // #endregion
 
 // #region Options
@@ -62,6 +60,7 @@ export const ItemOptions = styled('li', {
     fontSize: '$sm',
     color: '$purple100',
   },
+  cursor: 'pointer',
 
   variants: {
     active: {
@@ -290,4 +289,61 @@ export const DialogAssessActions = styled('button', {
   border: 'none',
   marginTop: '5px',
 })
-// #endregion
+
+export const ContainerSearch = styled('form', {
+  width: '500px',
+  position: 'relative',
+})
+
+export const SearchInput = styled('input', {
+  width: '100%',
+  height: '50px',
+  borderRadius: '$md',
+  backgroundColor: '$gray800',
+  padding: '$2 $5',
+  border: '1px solid $gray500',
+  color: 'white',
+  fontSize: '$md',
+})
+
+export const SearchIconInput = styled('button', {
+  position: 'absolute',
+  right: '10px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  cursor: 'pointer',
+  width: '50px',
+  height: '50px',
+  backgroundColor: 'transparent',
+  border: 'none',
+  color: 'white',
+
+  svg: {
+    width: '20px',
+    height: '20px',
+  },
+})
+
+export const ComponentIsSignIn = styled('div', {
+  width: '400px',
+  height: '200px',
+  backgroundColor: 'red',
+
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  transform: 'translate(-150px, -100px)',
+  zIndex: 1000,
+
+  variants: {
+    active: {
+      true: {
+        display: 'block',
+      },
+
+      false: {
+        display: 'none',
+      },
+    },
+  },
+})

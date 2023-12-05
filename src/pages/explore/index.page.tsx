@@ -1,6 +1,7 @@
 import MainLayout from '@/src/layouts/DefaultLayout'
 import {
   BookItemGrid,
+  ComponentIsSignIn,
   ContainerExplore,
   ContainerGrid,
   ContainerOptions,
@@ -24,18 +25,30 @@ import {
   HeaderTitleIcon,
   InfoItemBook,
   ItemOptions,
+  SearchIconInput,
+  SearchInput,
   SpanText,
 } from './styles'
-import { Binoculars, BookOpen, BookmarkSimple, X, Check } from 'phosphor-react'
-import { Search } from '@/src/components/Search'
+import {
+  Binoculars,
+  BookOpen,
+  BookmarkSimple,
+  X,
+  Check,
+  MagnifyingGlass,
+} from 'phosphor-react'
 import Image from 'next/image'
 
 import StarRatings from 'react-star-ratings'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Content, Overlay, Trigger } from '@/src/components/Dialog/styles'
 import { Avatar } from '@/src/components/Avatar'
 import { api } from '@/src/lib/axios'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession } from 'next-auth/react'
 
 interface AssessmentsInterface {
   id: string
@@ -55,9 +68,16 @@ interface BookInterface {
 }
 
 export default function Explore({ books }: any) {
+  const [activeCategory, setActiveCategory] = useState('tudo')
+  const [booksSearch, setBooksSearch] = useState([])
   const [open, setOpen] = useState(false)
   const [assess, setAssess] = useState(false)
+  const [containerIlsLogin, setContainerIsLogin] = useState(false)
   const [bookSelect, setBookSelect] = useState<BookInterface | null>(null)
+
+  const session = useSession()
+
+  // #region functions
 
   function handleBookSelected(book: BookInterface) {
     setBookSelect(book)
@@ -79,29 +99,114 @@ export default function Explore({ books }: any) {
     }
   }
 
+  function handleSetBooks(data: any) {
+    setBooksSearch(data)
+  }
+
+  async function handleSetActiveCategory(category: string) {
+    setActiveCategory(category)
+    if (category === 'tudo') {
+      handleSetBooks(books)
+    } else {
+      await api.get(`/books/${category}`).then((resp) => {
+        handleSetBooks(resp.data)
+      })
+    }
+  }
+
+  function handleVerifyIsSignIn() {
+    if (session.status === 'authenticated') {
+      setAssess(false)
+      setContainerIsLogin(true)
+    } else {
+      setAssess(true)
+      setContainerIsLogin(false)
+    }
+  }
+
+  // #endregion
+
+  useEffect(() => {
+    handleSetBooks(books)
+  }, [])
+
+  const searchSchema = z.object({
+    search: z.string(),
+  })
+
+  type SearchData = z.infer<typeof searchSchema>
+
+  async function handleSearch(data: SearchData) {
+    const results = books.filter((item: any) => {
+      return item.title.toLowerCase().includes(data.search.toLowerCase())
+    })
+    setBooksSearch(results)
+  }
+
+  const { register, handleSubmit } = useForm<SearchData>({
+    resolver: zodResolver(searchSchema),
+  })
   return (
     <MainLayout>
+      <ComponentIsSignIn active={assess} />
       <ContainerExplore>
         <HeaderExplore>
           <HeaderTitleIcon>
             <Binoculars />
             <h2>Explorar</h2>
           </HeaderTitleIcon>
-          <ContainerSearch>
-            <Search type="text" placeholder="Buscar livro ou autor" />
+          <ContainerSearch onSubmit={handleSubmit(handleSearch)}>
+            <SearchInput
+              type="text"
+              placeholder="Procurar livro"
+              {...register('search')}
+            />
+            <SearchIconInput type="submit">
+              <MagnifyingGlass />
+            </SearchIconInput>
           </ContainerSearch>
         </HeaderExplore>
         <ContainerOptions>
-          <ItemOptions active={true}>
+          <ItemOptions
+            active={activeCategory === 'tudo'}
+            onClick={() => handleSetActiveCategory('tudo')}
+          >
             <p>Tudo</p>
           </ItemOptions>
-          <ItemOptions>
+          <ItemOptions
+            active={activeCategory === 'computacao'}
+            onClick={() => handleSetActiveCategory('computacao')}
+          >
             <p>Computação</p>
+          </ItemOptions>
+          <ItemOptions
+            active={activeCategory === 'ficcao'}
+            onClick={() => handleSetActiveCategory('ficcao')}
+          >
+            <p>Ficção científica</p>
+          </ItemOptions>
+          <ItemOptions
+            active={activeCategory === 'horror'}
+            onClick={() => handleSetActiveCategory('horror')}
+          >
+            <p>Horror</p>
+          </ItemOptions>
+          <ItemOptions
+            active={activeCategory === 'hqs'}
+            onClick={() => handleSetActiveCategory('hqs')}
+          >
+            <p>HQs</p>
+          </ItemOptions>
+          <ItemOptions
+            active={activeCategory === 'suspense'}
+            onClick={() => handleSetActiveCategory('suspense')}
+          >
+            <p>Suspense</p>
           </ItemOptions>
         </ContainerOptions>
         <ContainerGrid>
           <Dialog.Root open={open} onOpenChange={setOpen}>
-            {books.map((book: any) => {
+            {booksSearch?.map((book: any) => {
               return (
                 <Trigger key={book.id} onClick={() => handleBookSelected(book)}>
                   <BookItemGrid>
@@ -167,9 +272,10 @@ export default function Explore({ books }: any) {
                     </DialogFooterItem>
                   </DialogFooter>
                 </DialogBookSelected>
+
                 <DialogOperation>
                   <span>Avaliações</span>
-                  <span onClick={openAssess}>Avaliar</span>
+                  <span onClick={handleVerifyIsSignIn}>Avaliar</span>
                 </DialogOperation>
                 <DialogToAssess active={assess}>
                   <DialogAssessmentsHeader>

@@ -18,17 +18,37 @@ import {
   UnderLine,
   ItemListProfileInfo,
   ItemListProfile,
+  ContainerSearch,
+  SearchInput,
+  SearchIconInput,
 } from './styles'
-import { BookOpen, BookmarkSimple, Books, User, UserList } from 'phosphor-react'
-
-import book1 from '@/src/assets/Book (1).png'
-import avatar from '@/src/assets/Avatar.png'
+import {
+  BookOpen,
+  BookmarkSimple,
+  Books,
+  MagnifyingGlass,
+  User,
+  UserList,
+} from 'phosphor-react'
 
 import Image from 'next/image'
 import StarRatings from 'react-star-ratings'
-import { Search } from '@/src/components/Search'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
+
+const searchSchema = z.object({
+  search: z.string(),
+})
+
+type SearchData = z.infer<typeof searchSchema>
+
+async function handleSearch(data: SearchData) {
+  console.log(data)
+}
 
 export default function Perfil() {
+  const { register, handleSubmit } = useForm<SearchData>({})
+
   return (
     <MainLayout>
       <MainContainer>
@@ -38,13 +58,27 @@ export default function Perfil() {
               <User />
               <h2>Perfil</h2>
             </Title>
-            <Search type="text" placeholder="Buscar livro avaliado" />
+            <ContainerSearch onSubmit={handleSubmit(handleSearch)}>
+              <SearchInput
+                type="text"
+                placeholder="Procurar livro"
+                {...register('search')}
+              />
+              <SearchIconInput type="submit">
+                <MagnifyingGlass />
+              </SearchIconInput>
+            </ContainerSearch>
             <TimeLineBooks>
               <div>
                 <InfoTimesPublish>Há 2 dias</InfoTimesPublish>
                 <ItemBook>
                   <ContainerTimeLineBookInfo>
-                    <Image src={book1} alt="" />
+                    <Image
+                      src="/assets/Book1.png"
+                      alt=""
+                      width={150}
+                      height={200}
+                    />
                     <TimeLineBookInfo>
                       <p>Entendendo Algoritmos</p>
                       <TimeLineBookInfoTitle>
@@ -81,7 +115,12 @@ export default function Perfil() {
           <ContainerInfoPerfil>
             <ProfileContainer>
               <ProfileIcon>
-                <Image src={avatar} width={72} alt=""></Image>
+                <Image
+                  src="/assets/Avatar.png"
+                  width={72}
+                  height={72}
+                  alt=""
+                ></Image>
               </ProfileIcon>
               <TitleProfile>Cristofer Rosser</TitleProfile>
               <span>membro desde 2019</span>

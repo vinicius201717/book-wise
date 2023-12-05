@@ -40,6 +40,8 @@ model Post {
   userId     String?
 
   assessments Assessment[]
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  categoryId  String?
 
   @@map("posts")
 }
@@ -60,7 +62,7 @@ model Assessment {
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String 
+  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -95,4 +97,11 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationToken")
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique
+
+  postId Post[]
 }

@@ -29,7 +29,6 @@ import React from 'react'
 
 export default function Home({ books }: any) {
   const session = useSession()
-  console.log(session)
 
   return (
     <MainLayout>
@@ -41,7 +40,7 @@ export default function Home({ books }: any) {
               <h2>Início</h2>
             </Title>
 
-            {books.map((book: any) => {
+            {books?.map((book: any) => {
               if (book.user) {
                 return (
                   <React.Fragment key={book.id}>

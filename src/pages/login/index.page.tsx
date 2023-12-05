@@ -1,3 +1,8 @@
+import React, { useEffect } from 'react'
+import Image from 'next/image'
+import { useSession, signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import {
   Container,
   ContainerImage,
@@ -6,28 +11,16 @@ import {
   SocialMidia,
   SocialMidiaContainer,
 } from './styles'
-import Image from 'next/image'
 
-import { useSession, signIn } from 'next-auth/react'
-
-import bookWiseImage from '../../assets/bookWiseImage.png'
-import logo from '../../assets/logo.png'
-import logoGoogle from '../../assets/logos_google-icon.png'
-import logoGithub from '../../assets/akar-icons_github-fill.png'
-import logoVisitor from '../../assets//RocketLaunch.png'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { prisma } from '@/src/lib/prisma'
-
-export default async function Login() {
+export default function Login() {
   const session = useSession()
   const router = useRouter()
 
-  const isSignedIn = session.status === 'authenticated'
-
-  if (isSignedIn) {
-    router.push('/home')
-  }
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      router.push('/home')
+    }
+  }, [session, router])
 
   async function handleSignIn() {
     await signIn('google')
@@ -36,9 +29,9 @@ export default async function Login() {
   return (
     <Container>
       <ContainerImage>
-        <Image src={bookWiseImage} alt="" />
+        <Image src="/assets/bookWiseImage.png" alt="" width={400} height={10} />
         <LogoImage>
-          <Image src={logo} alt="" />
+          <Image src="/assets/logo.png" alt="" width={200} height={50} />
         </LogoImage>
       </ContainerImage>
       <SocialMidiaContainer>
@@ -49,19 +42,31 @@ export default async function Login() {
             <br />
           </div>
           <Social onClick={handleSignIn}>
-            <Image src={logoGoogle} alt="" />
+            <Image
+              src="/assets/logos_google-icon.png"
+              alt=""
+              width={25}
+              height={25}
+            />
             <span>Entrar com Google</span>
           </Social>
           <Social>
-            <Image src={logoGithub} alt="" />
+            <Image
+              src="/assets/akar-icons_github-fill.png"
+              alt=""
+              width={25}
+              height={25}
+            />
             <span>Entrar com Github</span>
           </Social>
-          <Link
-            href={'/home'}
-            style={{ textDecoration: 'none', color: 'white' }}
-          >
+          <Link href="/home" passHref>
             <Social>
-              <Image src={logoVisitor} alt="" />
+              <Image
+                src="/assets/RocketLaunch.png"
+                alt=""
+                width={25}
+                height={25}
+              />
               <span>Entrar como visitante</span>
             </Social>
           </Link>
