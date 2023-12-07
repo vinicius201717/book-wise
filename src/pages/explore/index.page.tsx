@@ -49,6 +49,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
+import { register } from 'module'
 
 interface AssessmentsInterface {
   id: string
@@ -69,6 +70,7 @@ interface BookInterface {
 
 export default function Explore({ books }: any) {
   const [activeCategory, setActiveCategory] = useState('tudo')
+  const [rating, setRating] = useState(Number)
   const [booksSearch, setBooksSearch] = useState([])
   const [open, setOpen] = useState(false)
   const [assess, setAssess] = useState(false)
@@ -116,8 +118,8 @@ export default function Explore({ books }: any) {
 
   function handleVerifyIsSignIn() {
     if (session.status === 'authenticated') {
-      setAssess(false)
-      setContainerIsLogin(true)
+      setAssess(true)
+      setContainerIsLogin(false)
     } else {
       setAssess(true)
       setContainerIsLogin(false)
@@ -143,23 +145,40 @@ export default function Explore({ books }: any) {
     setBooksSearch(results)
   }
 
-  const { register, handleSubmit } = useForm<SearchData>({
+  const { register: form1, handleSubmit: handleSubmit1 } = useForm<SearchData>({
     resolver: zodResolver(searchSchema),
   })
+
+  const assessmentsSchema = z.object({
+    content: z.string(),
+    rating: z.number(),
+  })
+
+  type AssessmentsPostData = z.infer<typeof assessmentsSchema>
+
+  const { register: form2, handleSubmit: handleSubmit2 } =
+    useForm<AssessmentsPostData>({
+      resolver: zodResolver(assessmentsSchema),
+    })
+
+  function handleSubmitAssessments(data: AssessmentsPostData) {
+    console.log(data)
+  }
+
   return (
     <MainLayout>
-      <ComponentIsSignIn active={assess} />
+      <ComponentIsSignIn active={containerIlsLogin} />
       <ContainerExplore>
         <HeaderExplore>
           <HeaderTitleIcon>
             <Binoculars />
             <h2>Explorar</h2>
           </HeaderTitleIcon>
-          <ContainerSearch onSubmit={handleSubmit(handleSearch)}>
+          <ContainerSearch onSubmit={handleSubmit1(handleSearch)}>
             <SearchInput
               type="text"
               placeholder="Procurar livro"
-              {...register('search')}
+              {...form1('search')}
             />
             <SearchIconInput type="submit">
               <MagnifyingGlass />
@@ -277,14 +296,20 @@ export default function Explore({ books }: any) {
                   <span>Avaliações</span>
                   <span onClick={handleVerifyIsSignIn}>Avaliar</span>
                 </DialogOperation>
-                <DialogToAssess active={assess}>
+                {/* =============FORM=============== */}
+                <DialogToAssess
+                  active={assess}
+                  onSubmit={handleSubmit2(handleSubmitAssessments)}
+                >
                   <DialogAssessmentsHeader>
                     <DialogAssessmentsHeaderProfile>
                       <Avatar src="/assets/avatar.png" />
                       <p>Brandon Botosh</p>
                     </DialogAssessmentsHeaderProfile>
                     <StarRatings
-                      rating={3}
+                      {...form2('rating')}
+                      rating={rating}
+                      changeRating={setRating}
                       starDimension="15"
                       starEmptyColor="gray"
                       starHoverColor="yellow"
@@ -292,16 +317,17 @@ export default function Explore({ books }: any) {
                       numberOfStars={5}
                     />
                   </DialogAssessmentsHeader>
-                  <DialogTextArea />
+                  <DialogTextArea {...form2('content')} />
                   <DialogAssessFooter>
-                    <DialogAssessActions onClick={openAssess}>
+                    <DialogAssessActions type="button" onClick={openAssess}>
                       <X width={30} height={30} color="#8381D9" />
                     </DialogAssessActions>
-                    <DialogAssessActions>
-                      <Check width={30} height={30} color="#50B2C0" />
+                    <DialogAssessActions type="submit">
+                      <Check width={30} height={30} color="#275757" />
                     </DialogAssessActions>
                   </DialogAssessFooter>
                 </DialogToAssess>
+                {/* =============FORM============= */}
                 <DialogContainerAssessments>
                   <DialogAssessments>
                     <DialogAssessmentsHeader>

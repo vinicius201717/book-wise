@@ -266,6 +266,10 @@ export const DialogTextArea = styled('textarea', {
   border: '1px solid $gray500',
   borderRadius: '$sm',
 
+  color: '$white',
+  padding: '$3',
+  fontSize: '$lg',
+
   '&:focus': {
     outline: 'none',
   },
@@ -288,6 +292,8 @@ export const DialogAssessActions = styled('button', {
   alignItems: 'center',
   border: 'none',
   marginTop: '5px',
+
+  cursor: 'pointer',
 })
 
 export const ContainerSearch = styled('form', {
